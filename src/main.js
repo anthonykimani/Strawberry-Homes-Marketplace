@@ -5,7 +5,7 @@ import marketplaceAbi from "../contract/marketplace.abi.json";
 import erc20Abi from "../contract/erc20.abi.json";
 
 const ERC20_DECIMALS = 18;
-const MPContractAddress = "0x0EECC592dd868C4051ACF1d782082678Db26525c";
+const MPContractAddress = "0x5dC4718e8683FCE7132740D9D41BA4970Fe8969D";
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
 let kit;
@@ -159,6 +159,12 @@ document
         .shiftedBy(ERC20_DECIMALS)
         .toString(),
     ];
+    notification("⌛ Waiting for payment approval...");
+    try {
+      await approve(2);
+    } catch (error) {
+      notification(`⚠️ ${error}.`);
+    }
     notification(`⌛ Adding "${params[0]}"...`);
     try {
       const result = await contract.methods
@@ -169,6 +175,7 @@ document
     }
     notification(`🎉 You successfully added "${params[0]}".`);
     getProducts();
+    getBalance();
   });
 
 document.querySelector("#marketplace").addEventListener("click", async (e) => {
@@ -193,5 +200,4 @@ document.querySelector("#marketplace").addEventListener("click", async (e) => {
     }
   }
 });
-
 
